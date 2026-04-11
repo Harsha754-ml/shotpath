@@ -8,15 +8,16 @@ pub fn is_image(path: &Path) -> bool {
 }
 
 pub fn wait_for_file_ready(path: &Path) {
-    // Basic retry loop to wait for OS to finish writing the file
     let mut retries = 0;
-    while retries < 5 {
-        if let Ok(metadata) = std::fs::metadata(path) {
-            if metadata.len() > 0 {
-                return;
+    while retries < 10 {
+        if let Ok(file) = std::fs::OpenOptions::new().read(true).write(true).open(path) {
+            if let Ok(metadata) = file.metadata() {
+                if metadata.len() > 0 {
+                    return;
+                }
             }
         }
-        sleep(Duration::from_millis(100));
+        sleep(Duration::from_millis(200));
         retries += 1;
     }
 }

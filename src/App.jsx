@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
+import FolderSelector from "./components/FolderSelector";
 import "./styles/main.css";
 
 function App() {
@@ -19,6 +20,11 @@ function App() {
     invoke("update_config", { config: { folder_path: newFolder, enabled: newEnabled, copy_mode: newMode } });
   };
 
+  const handleFolderChange = (newFolder) => {
+    setFolder(newFolder);
+    saveConfig(newFolder, enabled, copyMode);
+  };
+
   return (
     <div className="container">
       <h1>shotpath</h1>
@@ -28,15 +34,7 @@ function App() {
       
       <div className="field">
         <label>Screenshot Folder:</label>
-        <input 
-          type="text" 
-          value={folder} 
-          onChange={(e) => {
-            setFolder(e.target.value);
-            saveConfig(e.target.value, enabled, copyMode);
-          }} 
-          placeholder="C:\Users\...\Pictures\Screenshots"
-        />
+        <FolderSelector folder={folder} onSelect={handleFolderChange} />
       </div>
 
       <div className="field">

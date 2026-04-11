@@ -1,10 +1,29 @@
-import React from "react";
+import { open } from "@tauri-apps/api/dialog";
 
-function FolderSelector() {
+function FolderSelector({ folder, onSelect }) {
+  const handleSelect = async () => {
+    try {
+      const selected = await open({
+        directory: true,
+        multiple: false,
+        title: "Select Screenshot Folder",
+      });
+      if (selected) {
+        onSelect(selected);
+      }
+    } catch (err) {
+      console.error("Failed to open dialog:", err);
+    }
+  };
+
   return (
-    <div>
-      <button>Select Folder</button>
-      <span>No folder selected</span>
+    <div className="folder-selector">
+      <div className="folder-display">
+        {folder || "No folder selected"}
+      </div>
+      <button onClick={handleSelect} className="select-btn">
+        Browse Folder
+      </button>
     </div>
   );
 }

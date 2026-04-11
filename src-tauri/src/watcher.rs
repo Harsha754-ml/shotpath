@@ -33,9 +33,17 @@ pub fn start_watching(folder: String) {
                                 if current_config.copy_mode == "image" {
                                     clipboard::copy_image_to_clipboard(&path);
                                     println!("Image copied to clipboard!");
+                                    let _ = tauri::api::notification::Notification::new("com.shotpath.dev")
+                                        .title("ShotPath")
+                                        .body(format!("Image copied: {:?}", path.file_name().unwrap_or_default()))
+                                        .show();
                                 } else {
                                     clipboard::copy_path_to_clipboard(&path);
                                     println!("Path copied to clipboard!");
+                                    let _ = tauri::api::notification::Notification::new("com.shotpath.dev")
+                                        .title("ShotPath")
+                                        .body(format!("Path copied: {:?}", path.file_name().unwrap_or_default()))
+                                        .show();
                                 }
                             }
                         }
