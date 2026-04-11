@@ -1,30 +1,32 @@
 # ShotPath 📸
 
-ShotPath is a lightweight Windows utility that automatically monitors your folders for new images and copies them to your clipboard.
+ShotPath is a lightweight Windows utility that brings a "missing" macOS feature to Windows: **automatic clipboard synchronization for folder-based screenshots.**
 
-## 🚀 Why ShotPath?
+## 🚀 The Backstory: Mac vs. Windows
 
-Windows lacks a native feature to automatically copy new images from a specific folder to the clipboard. Whether you're using a game's built-in screenshot tool or a custom capture software that only saves to disk, ShotPath bridges the gap by making those images instantly available for pasting.
+On macOS, you can easily configure screenshots to go straight to your clipboard or a folder—and often both. Windows users, however, are usually stuck: either you use `Win + Shift + S` (clipboard only, no file) or `Win + PrtSc` (file only, no clipboard). 
+
+If you use professional capture tools, game-specific screenshotters, or specialized software, they almost always save to a folder. ShotPath bridges this gap. It watches your folders and instantly pushes those new files to your clipboard.
+
+**It's the "Best of Both Worlds" feature Windows was missing.**
 
 ## ✨ Features
 
-- **Folder Monitoring:** Watches any directory you choose for new image files.
-- **Instant Clipboard:** Copies the image (or its path) as soon as it's created or modified.
-- **Toggled Activity:** Easily enable or disable the watcher from the system tray.
-- **Customizable Modes:** Choose between copying the actual image data or just the file path.
-- **Lightweight:** Built with Tauri and Rust for minimal system resource usage.
+- **macOS Style Workflow:** Save the file *and* have it ready to paste immediately.
+- **Native Folder Monitoring:** Real-time watching of any directory using Rust's `notify` engine.
+- **Dual Modes:**
+    - **Image Mode:** Copies the actual image data (perfect for Discord, Slack, or Word).
+    - **Path Mode:** Copies the file path (perfect for developers and CLI workflows).
+- **Smart Detection:** Automatically filters for images and waits for the OS to finish writing the file before copying.
+- **System Tray Integration:** Runs quietly in the background, just like a native system utility.
 
 ## 🛠️ Built With
 
-- **Backend:** Rust (Tauri)
-- **Frontend:** React (Vite)
-- **Watcher:** `notify` (cross-platform filesystem notifications)
+- **Backend:** Rust (Tauri) - for extreme performance and safety.
+- **Frontend:** React + Vite - for a clean, modern configuration UI.
+- **API:** Tauri Native Dialogs & Notifications.
 
 ## 📦 Installation
-
-To run this project locally, you'll need:
-- [Rust](https://www.rust-lang.org/tools/install)
-- [Node.js](https://nodejs.org/)
 
 ```bash
 # Install dependencies
@@ -37,11 +39,12 @@ npm run tauri dev
 npm run tauri build
 ```
 
-## 📂 Structure
+## 📂 How it Works
 
-- `src-tauri/`: Rust backend logic (watcher, clipboard, tray)
-- `src/`: React frontend UI
-- `public/`: Static assets and icons
+1. **Watch:** The Rust backend starts a background thread monitoring your chosen folder.
+2. **Detect:** When a new `.png`, `.jpg`, or `.webp` is created, ShotPath triggers.
+3. **Sync:** The app handles the file lock, processes the image, and updates your system clipboard.
+4. **Notify:** A native Windows notification confirms the sync is complete.
 
 ---
-*Created because Windows didn't have this feature, so I made it myself.*
+*Windows didn't have it. Mac did. Now Windows has it too.*
