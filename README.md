@@ -1,32 +1,27 @@
-# ShotPath 📸
+# ShotPath
 
-ShotPath is a lightweight Windows utility that brings a "missing" macOS feature to Windows: **automatic clipboard synchronization for folder-based screenshots.**
+ShotPath is a lightweight utility for Windows that implements a feature commonly found on macOS: automatic clipboard synchronization for screenshot folders.
 
-## 🚀 The Backstory: Mac vs. Windows
+## The Problem
+On Windows, native screenshot tools are fragmented. You either capture to the clipboard (Win + Shift + S) without saving a file, or you save a file (Win + PrtSc) without it being added to the clipboard. Users of third-party capture software, game-specific screenshotters, or professional tools often face the same issue: images are saved to disk, but sharing them requires manually opening a folder and copying the file.
 
-On macOS, you can easily configure screenshots to go straight to your clipboard or a folder—and often both. Windows users, however, are usually stuck: either you use `Win + Shift + S` (clipboard only, no file) or `Win + PrtSc` (file only, no clipboard). 
+## The Solution
+ShotPath bridges this gap by monitoring a designated folder in real-time. When a new image is detected, it is immediately copied to your clipboard, making it available for instant pasting into applications like Discord, Slack, or document editors.
 
-If you use professional capture tools, game-specific screenshotters, or specialized software, they almost always save to a folder. ShotPath bridges this gap. It watches your folders and instantly pushes those new files to your clipboard.
+## Core Features
+- **Real-time Folder Monitoring:** Utilizes a high-performance Rust-based watcher to detect new files instantly.
+- **Dual Copy Modes:** Choose between copying the actual image data (for sharing) or the absolute file path (for development/CLI workflows).
+- **Native System Integration:** Runs as a background process with a system tray icon for quick access.
+- **File Integrity Handling:** Intelligent retry logic ensures the OS has finished writing the file before the clipboard is updated.
+- **Desktop Notifications:** Provides immediate confirmation when a synchronization occurs.
 
-**It's the "Best of Both Worlds" feature Windows was missing.**
+## Technical Architecture
+- **Backend:** Rust (Tauri) for minimal resource overhead and native performance.
+- **Frontend:** React and Vite for a clean, responsive configuration interface.
+- **APIs:** Leverages Tauri's native dialogs, notifications, and filesystem watchers.
 
-## ✨ Features
-
-- **macOS Style Workflow:** Save the file *and* have it ready to paste immediately.
-- **Native Folder Monitoring:** Real-time watching of any directory using Rust's `notify` engine.
-- **Dual Modes:**
-    - **Image Mode:** Copies the actual image data (perfect for Discord, Slack, or Word).
-    - **Path Mode:** Copies the file path (perfect for developers and CLI workflows).
-- **Smart Detection:** Automatically filters for images and waits for the OS to finish writing the file before copying.
-- **System Tray Integration:** Runs quietly in the background, just like a native system utility.
-
-## 🛠️ Built With
-
-- **Backend:** Rust (Tauri) - for extreme performance and safety.
-- **Frontend:** React + Vite - for a clean, modern configuration UI.
-- **API:** Tauri Native Dialogs & Notifications.
-
-## 📦 Installation
+## Getting Started
+To run or build this project locally, ensure you have the Rust toolchain and Node.js installed.
 
 ```bash
 # Install dependencies
@@ -39,12 +34,11 @@ npm run tauri dev
 npm run tauri build
 ```
 
-## 📂 How it Works
-
-1. **Watch:** The Rust backend starts a background thread monitoring your chosen folder.
-2. **Detect:** When a new `.png`, `.jpg`, or `.webp` is created, ShotPath triggers.
-3. **Sync:** The app handles the file lock, processes the image, and updates your system clipboard.
-4. **Notify:** A native Windows notification confirms the sync is complete.
+## How It Works
+1. A background thread monitors your selected directory for image creation or modification events.
+2. Upon detection, ShotPath confirms the file is ready for reading (handling OS-level file locks).
+3. Based on your configuration, the app copies the image data or its path to the system clipboard.
+4. A system notification confirms the action is complete.
 
 ---
-*Windows didn't have it. Mac did. Now Windows has it too.*
+*Bringing macOS-style screenshot workflows to the Windows desktop.*
