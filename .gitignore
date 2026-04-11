@@ -1,0 +1,59 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node modules
+node_modules/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+dist-ssr/
+*.local
+src-tauri/target/
+
+# Tauri
+src-tauri/binaries
+src-tauri/gen
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Optional next.js build output
+.next
+out
+
+# Optional Vercel
+.vercel
+
+# Optional Netlify
+.netlify
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts

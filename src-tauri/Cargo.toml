@@ -1,0 +1,20 @@
+[package]
+name = "shotpath"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tauri = { version = "1.5", features = [ "api-all", "system-tray"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+notify = "6.1.1"
+arboard = "3.3.0"
+image = "0.24.9"
+clipboard-win = "5.4.1"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[[bin]]
+name = "test_clip"
+path = "test_clip.rs"
