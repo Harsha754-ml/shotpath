@@ -26,10 +26,9 @@ pub fn start_watching(folder: String) {
                         for path in event.paths {
                             if utils::is_image(&path) {
                                 println!("New image detected: {:?}", path);
+                                // Confirm file is ready, then copy multi-format
                                 utils::wait_for_file_ready(&path);
                                 
-                                // Re-load config to get current mode
-                                let current_config = config::load_config();
                                 clipboard::copy_to_clipboard(&path);
                                 println!("Image & Path copied to clipboard!");
                                 let _ = tauri::api::notification::Notification::new("com.shotpath.dev")
