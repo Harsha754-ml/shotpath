@@ -38,20 +38,6 @@ function App() {
       </div>
 
       <div className="field">
-        <label>Copy Mode:</label>
-        <div className="toggle-group">
-          <button 
-            className={copyMode === "path" ? "selected" : ""} 
-            onClick={() => { setCopyMode("path"); saveConfig(folder, enabled, "path"); }}
-          >Path</button>
-          <button 
-            className={copyMode === "image" ? "selected" : ""} 
-            onClick={() => { setCopyMode("image"); saveConfig(folder, enabled, "image"); }}
-          >Image</button>
-        </div>
-      </div>
-
-      <div className="field">
         <label className="switch">
           <input 
             type="checkbox" 
@@ -66,9 +52,7 @@ function App() {
       </div>
 
       <p className="hint">
-        {copyMode === "path" 
-          ? "Copies file path (best for CLI/Programming)." 
-          : "Copies actual image (best for Discord/Slack/Word)."}
+        Automatically copies both the image and the file path to your clipboard.
       </p>
     </div>
   );
