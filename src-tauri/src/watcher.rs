@@ -3,7 +3,6 @@ use std::path::Path;
 use std::sync::mpsc::channel;
 use crate::utils;
 use crate::clipboard;
-use crate::config;
 
 pub fn start_watching(folder: String) {
     if folder.is_empty() { return; }
