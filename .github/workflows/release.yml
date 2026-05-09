@@ -1,0 +1,46 @@
+name: Release Changelog Generator
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get commits since last release
+        id: changelog
+        run: |
+          git fetch origin main --tags
+          LAST_TAG=$(git describe --tags --abbrev=0 origin/main 2>/dev/null || echo "")
+          if [ -z "$LAST_TAG" ]; then
+            echo "commits=$(git log --oneline | head -20 | base64)" >> $GITHUB_OUTPUT
+          else
+            echo "commits=$(git log $LAST_TAG..HEAD --oneline | base64)" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate changelog
+        id: changelog_content
+        run: |
+          COMMITS=$(echo "${{ steps.changelog.outputs.commits }}" | base64 -d)
+          CHANGELOG="# Release Changelog\n\n## Commits\n$COMMITS"
+          echo "content<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        if: steps.changelog.outputs.commits != ''
+        uses: softprops/action-gh-release@v2
+        with:
+          body: ${{ steps.changelog_content.outputs.content }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
