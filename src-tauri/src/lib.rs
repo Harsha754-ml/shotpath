@@ -9,8 +9,6 @@ mod clipboard;
 mod watcher;
 mod tray;
 
-use tauri::Manager;
-
 #[tauri::command]
 fn get_config() -> config::Config {
     config::load_config()

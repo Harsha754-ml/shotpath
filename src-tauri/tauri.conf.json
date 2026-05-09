@@ -41,10 +41,5 @@
       "certificateThumbprint": null,
       "digestAlgorithm": "sha256"
     }
-  },
-  "plugins": {
-    "notification": {
-      "all": true
-    }
   }
 }
