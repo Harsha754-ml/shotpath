@@ -1,29 +1,39 @@
-use tauri::{AppHandle, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
+use tauri::{
+    Manager,
+    menu::{Menu, MenuItem},
+    tray::{TrayIcon, TrayIconBuilder, TrayIconEvent, MouseButton, MouseButtonState},
+};
 
-pub fn create_tray() -> SystemTray {
-    let open_ui = CustomMenuItem::new("open".to_string(), "Open UI");
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let tray_menu = SystemTrayMenu::new()
-        .add_item(open_ui)
-        .add_native_item(SystemTrayMenuItem::Separator)
-        .add_item(quit);
+pub fn create_tray(app: &tauri::App) -> Result<TrayIcon, tauri::Error> {
+    let open_item = MenuItem::with_id(app, "open", "Open UI", true, None::<&str>)?;
+    let quit_item = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
+    let menu = Menu::with_items(app, &[&open_item, &quit_item])?;
 
-    SystemTray::new().with_menu(tray_menu)
-}
-
-pub fn handle_tray_event(app: &AppHandle, event: SystemTrayEvent) {
-    match event {
-        SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
-            "open" => {
-                let window = app.get_window("main").unwrap();
-                window.show().unwrap();
-                window.set_focus().unwrap();
+    TrayIconBuilder::new()
+        .menu(&menu)
+        .tooltip("ShotPath")
+        .on_menu_event(|app, event| {
+            match event.id.as_ref() {
+                "open" => {
+                    if let Some(window) = app.get_webview_window("main") {
+                        let _ = window.show();
+                        let _ = window.set_focus();
+                    }
+                }
+                "quit" => {
+                    std::process::exit(0);
+                }
+                _ => {}
             }
-            "quit" => {
-                std::process::exit(0);
+        })
+        .on_tray_icon_event(|tray, event| {
+            if let TrayIconEvent::Click { button: MouseButton::Left, button_state: MouseButtonState::Up, .. } = event {
+                let app = tray.app_handle();
+                if let Some(window) = app.get_webview_window("main") {
+                    let _ = window.show();
+                    let _ = window.set_focus();
+                }
             }
-            _ => {}
-        },
-        _ => {}
-    }
+        })
+        .build(app)
 }

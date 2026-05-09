@@ -1,4 +1,4 @@
-import { open } from "@tauri-apps/api/dialog";
+import { open } from "@tauri-apps/plugin-dialog";
 
 function FolderSelector({ folder, onSelect }) {
   const handleSelect = async () => {

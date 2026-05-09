@@ -6,7 +6,7 @@ use std::path::PathBuf;
 pub struct Config {
     pub folder_path: String,
     pub enabled: bool,
-    pub copy_mode: String, // "path" or "image"
+    pub copy_mode: String,
 }
 
 impl Default for Config {
@@ -39,7 +39,7 @@ pub fn save_config(config: &Config) {
 }
 
 fn get_config_path() -> PathBuf {
-    let mut path = tauri::api::path::config_dir().unwrap_or_else(|| PathBuf::from("."));
+    let mut path = dirs::config_dir().unwrap_or_else(|| PathBuf::from("."));
     path.push("shotpath");
     path.push("config.json");
     path
