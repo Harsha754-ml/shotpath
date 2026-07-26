@@ -16,14 +16,12 @@ fn get_config() -> config::Config {
 
 #[tauri::command]
 fn update_config(app: tauri::AppHandle, config: config::Config) {
-    let old_config = config::load_config();
-    let new_folder = config.folder_path.clone();
-
     config::save_config(&config);
 
-    if config.enabled && (new_folder != old_config.folder_path || !old_config.enabled) {
-        println!("Restarting watcher for: {}", new_folder);
-        watcher::start_watching(app.clone(), new_folder);
+    if config.enabled && !config.folder_path.is_empty() {
+        watcher::start_watching(app, config.folder_path.clone());
+    } else {
+        watcher::stop_watching();
     }
 }
 

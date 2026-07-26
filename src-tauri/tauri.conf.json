@@ -11,9 +11,10 @@
   },
   "app": {
     "withGlobalTauri": true,
-    "windows": [
-      {
-        "title": "ShotPath",
+      "windows": [
+        {
+          "label": "main",
+          "title": "ShotPath",
         "width": 800,
         "height": 600,
         "resizable": true,
